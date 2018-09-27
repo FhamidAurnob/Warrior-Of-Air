@@ -1,7 +1,7 @@
 #include "iGraphics.h"
 #include "myVariable.h"
 
-
+int z=1;
 int i=0; ////loading page changing variable  
 int coverpage=0; ////cover page changing variable
 int BG=0, backgroundIndex=0,background_x[]={0,0},background_y[]={0,win_h};
@@ -20,6 +20,12 @@ struct enemyPlane planez[150000];
 ///////////////////////////////////////////////////////////// loading page changing //////////////////////////
 void loadingPage(){
 	i++;
+}
+void enemyPlaneChange(){
+	if(z==5)
+		z=1;
+	z++;
+	
 }
 ///////////////////////////////////////////////////////////// cover page changing //////////////////////////
 void coverPage(){
@@ -229,7 +235,7 @@ void bombchange()
 			if (planez[i].bomby  <-200)
 				planez[i].bomby = planez[i].enemy_y;
 
-				planez[i].bomby -= 30;
+				planez[i].bomby -= 15;
 		}
 	}
 }
@@ -357,7 +363,7 @@ void iDraw()
 			{
 				if (planez[i].start)
 				{
-					iShowImage(planez[i].enemy_x, planez[i].enemy_y, enemyheight, enemywidth, enemy[1] );  //EnemyPlane
+					iShowImage(planez[i].enemy_x, planez[i].enemy_y, enemyheight, enemywidth, enemy[z] );  //EnemyPlane
 
 					if (planez[i].bombing)
 					{
@@ -407,8 +413,8 @@ void iDraw()
 				iText(690, 200, score, GLUT_BITMAP_TIMES_ROMAN_24);
 
 				iSetColor(r, g, b);
-				iText(620, 50, "Press Space To Play Again", GLUT_BITMAP_TIMES_ROMAN_24);
-				iText(620, 30, "Press b To Go To Main Menu", GLUT_BITMAP_TIMES_ROMAN_24);
+				iText((win_w/2)-10,70, "Press 'Space' To Play Again", GLUT_BITMAP_TIMES_ROMAN_24);
+				iText((win_w/2)-10,40, "Press 'Esc' To Go To Main Menu", GLUT_BITMAP_TIMES_ROMAN_24);
 		
 			}
 	
@@ -417,11 +423,14 @@ void iDraw()
 	}
 	else if(gamestate==3)////////////////// high score ////////////////
 	{
+		iShowImage(0,0,win_w,win_h,highscore);
 		iShowImage(win_w-150,60,120,80,back);
+
 	}
 	else if(gamestate==4)////////////////// option //////////////////
 	{
-		iShowImage(0,0,win_w,win_h,option);
+		iShowImage(0,0,win_w,win_h,option[0]);
+		iShowImage(30,150,win_w-50,win_h/2,option[1]);
 		iShowImage(win_w-150,60,120,80,back);
 	}
 	else if(gamestate==5)////////////////// about ///////////////////
@@ -431,6 +440,7 @@ void iDraw()
 	}
 	else if(gamestate==6)//////////////// credit ///////////////////
 	{
+		iShowImage(0,0,win_w,win_h,credit);
 		iShowImage(win_w-150,60,120,80,back);
 	}
 	else if(gamestate==7)//////////////// home ////////////////////
@@ -646,7 +656,8 @@ int main()
 	iSetTimer(1700,loadingPage);
 	iSetTimer(3000,coverPage);
 	iSetTimer(10,change_background);
-	iSetTimer(10,enemyPlaneCordinateChange);
+	iSetTimer(20,enemyPlaneCordinateChange);
+	//iSetTimer(12000,enemyPlaneChange);
 	setplane();
 	planes = iSetTimer(300, planechange);
 	bullets = iSetTimer(60, bulletchange);
